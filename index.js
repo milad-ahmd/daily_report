@@ -5,7 +5,6 @@ const app = express();
 const slackSigningSecret = 'bb615790232e67387c61160aa98fd760';
 const port = process.env.PORT || 3000;
 const router = express.Router();
-const web = new WebClient('xoxb-721157103719-944601703649-vDnLhDUdHtceRkqAtWHbeVTq');
 
 // Initialize the adapter to trigger listeners with envelope data and headers
 const slackEvents = createEventAdapter(slackSigningSecret, {
