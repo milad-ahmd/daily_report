@@ -25,6 +25,7 @@ router.post('/message', function (req, res) {
           break
         }
       }
+      console.log(lastBotMessageIndex,lastMessage,lastBotMessage)
       if(lastBotMessageIndex!==0){
         if(lastMessage&&lastMessage==='daily'){
           await web.chat.postMessage({
