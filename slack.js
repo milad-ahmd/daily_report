@@ -34,15 +34,18 @@ router.post('/message', function (req, res) {
           })
         }else{
           if(BotMessages.indexOf(lastBotMessage)===BotMessages.length-1){
-            await web.chat.postMessage({
-              channel:'#daily' ,
-              text: `daily report complete by <${req.body.event.user}>`,
-            })
+
           }else{
             await web.chat.postMessage({
               channel:req.body.event.channel,
               text: lastBotMessage?BotMessages[BotMessages.indexOf(lastBotMessage)+1]:BotMessages[0],
             })
+            if(BotMessages.indexOf(lastBotMessage)+1===BotMessages.length-1){
+              await web.chat.postMessage({
+                channel:'#daily',
+                text: `daily report complete by <${req.body.event.user}>`,
+              })
+            }
           }
 
         }
