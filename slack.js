@@ -11,6 +11,7 @@ const BotMessages = ['Hey! Are you ready to have our YapAiTek daily meeting now?
 const web = new WebClient(config.token)
 
 router.post('/message', function (req, res) {
+  console.log(req.body);
   if (req.body.event.channel_type === 'im' && req.body.event.type === 'message') {
     axios.get(`https://slack.com/api/conversations.history?token=${config.token}&channel=${req.body.event.channel}&limit=10`).then(async messages => {
       let lastBotMessage = null
