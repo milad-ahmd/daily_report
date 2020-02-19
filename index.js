@@ -25,23 +25,22 @@ slackEvents.on('message', (event, body, headers) => {
 })();
 
 
-//
-//// Create a new instance of the WebClient class with the token read from your environment variable
-//const web = new WebClient('xoxb-721157103719-944601703649-0cFBQvGv43dLYhxpqNkG5Loh');
-//// The current date
-//const currentTime = new Date().toTimeString();
-//
-//(async () => {
-//
-//  try {
-//    // Use the `chat.postMessage` method to send a message from this app
-//    await web.chat.postMessage({
-//      channel: '#daily',
-//      text: `The current time is ${currentTime}`,
-//    });
-//  } catch (error) {
-//    console.log(error);
-//  }
-//
-//  console.log('Message posted!');
-//})();
+
+const web = new WebClient('xoxb-721157103719-944601703649-46iELTejXubbjjYtVRm32HCN');
+// The current date
+const currentTime = new Date().toTimeString();
+
+(async () => {
+
+  try {
+    // Use the `chat.postMessage` method to send a message from this app
+    await web.chat.postMessage({
+      channel: '#daily',
+      text: `The current time is ${currentTime}`,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log('Message posted!');
+})();
