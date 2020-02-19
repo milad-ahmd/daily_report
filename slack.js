@@ -33,9 +33,7 @@ router.post('/message', function (req, res) {
             text: BotMessages[0],
           })
         }else{
-          if(BotMessages.indexOf(lastBotMessage)===BotMessages.length-1){
 
-          }else{
             await web.chat.postMessage({
               channel:req.body.event.channel,
               text: lastBotMessage?BotMessages[BotMessages.indexOf(lastBotMessage)+1]:BotMessages[0],
@@ -47,9 +45,6 @@ router.post('/message', function (req, res) {
               })
             }
           }
-
-        }
-
       }
 
 
