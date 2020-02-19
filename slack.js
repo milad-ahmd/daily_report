@@ -14,6 +14,7 @@ router.post('/message', function (req, res) {
   if (req.body.event.channel_type === 'im' && req.body.event.type === 'message') {
     axios.get(`https://slack.com/api/conversations.history?token=${config.token}&channel=${req.body.event.channel}&limit=10`).then(async messages => {
       let lastBotMessage = null
+      let lastMessage = messages.data.messages?messages.data.messages[0].text:null;
       let lastBotMessageIndex = 0
       let i=0;
       for (let item of messages.data.messages) {
@@ -25,10 +26,26 @@ router.post('/message', function (req, res) {
         }
       }
       if(lastBotMessageIndex!==0){
-        await web.chat.postMessage({
-          channel:req.body.event.channel ,
-          text: lastBotMessage?BotMessages[BotMessages.indexOf(lastBotMessage)+1]:BotMessages[0],
-        })
+        if(lastMessage&&lastMessage==='daily'){
+          await web.chat.postMessage({
+            channel:req.body.event.channel ,
+            text: BotMessages[0],
+          })
+        }else{
+          if(BotMessages.indexOf(lastBotMessage)===BotMessages.length){
+            await web.chat.postMessage({
+              channel:'#daily' ,
+              text: `daily report complete by <${req.body.event.user}>`,
+            })
+          }else{
+            await web.chat.postMessage({
+              channel:req.body.event.channel,
+              text: lastBotMessage?BotMessages[BotMessages.indexOf(lastBotMessage)+1]:BotMessages[0],
+            })
+          }
+
+        }
+
       }
 
 
