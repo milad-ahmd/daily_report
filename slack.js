@@ -14,16 +14,23 @@ router.post('/message', function (req, res) {
   if (req.body.event.channel_type === 'im' && req.body.event.type === 'message') {
     axios.get(`https://slack.com/api/conversations.history?token=${config.token}&channel=${req.body.event.channel}&limit=10`).then(async messages => {
       let lastBotMessage = null
+      let lastBotMessageIndex = 0
+      let i=0;
       for (let item of messages.data.messages) {
-        if (item.user !== req.body.event.channel_type) {
+        i++;
+        if (item.user !== req.body.event.channel_type&&!lastBotMessage) {
           lastBotMessage = item.text
+          lastBotMessageIndex=i-1;
           break
         }
       }
-      await web.chat.postMessage({
-        channel:req.body.event.channel ,
-        text: lastBotMessage?BotMessages[BotMessages.indexOf(lastBotMessage)+1]:BotMessages[0],
-      })
+      if(lastBotMessageIndex!==0){
+        await web.chat.postMessage({
+          channel:req.body.event.channel ,
+          text: lastBotMessage?BotMessages[BotMessages.indexOf(lastBotMessage)+1]:BotMessages[0],
+        })
+      }
+
 
     })
   }
