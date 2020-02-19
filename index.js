@@ -5,6 +5,7 @@ const app = express();
 const slackSigningSecret = 'bb615790232e67387c61160aa98fd760';
 const port = process.env.PORT || 3000;
 const router = express.Router();
+const web = new WebClient('xoxb-721157103719-944601703649-vDnLhDUdHtceRkqAtWHbeVTq');
 
 // Initialize the adapter to trigger listeners with envelope data and headers
 const slackEvents = createEventAdapter(slackSigningSecret, {
@@ -21,17 +22,17 @@ slackEvents.on('message', (event, body, headers) => {
   }
 });
 
+
 (async () => {
   const server = await slackEvents.start(port);
   console.log(`Listening for events on ${server.address().port}`);
 })();
-
-router.post("/api/message", function (req,res) {
+router.post("/message", function (req,res) {
   console.log('req',req);
 });
 
+app.use('/api',router)
 
-const web = new WebClient('xoxb-721157103719-944601703649-46iELTejXubbjjYtVRm32HCN');
 // The current date
 const currentTime = new Date().toTimeString();
 
