@@ -17,9 +17,10 @@ router.post('/message', function (req, res) {
       let lastMessage = messages.data.messages?messages.data.messages[0].text:null;
       let lastBotMessageIndex = 0
       let i=0;
+
       for (let item of messages.data.messages) {
         i++;
-        if (item.user !== req.body.event.channel_type&&!lastBotMessage) {
+        if (item.bot_id==='BU4HJ558X'&&!lastBotMessage) {
           lastBotMessage = item.text
           lastBotMessageIndex=i-1;
           break
