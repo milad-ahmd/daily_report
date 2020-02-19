@@ -46,6 +46,11 @@ router.post('/message', function (req, res) {
               })
             }
           }
+      }else{
+        await web.chat.postMessage({
+          channel:req.body.event.channel,
+          text: BotMessages[0],
+        })
       }
 
 
