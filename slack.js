@@ -26,7 +26,6 @@ router.post('/message', function (req, res) {
           break
         }
       }
-      console.log(lastBotMessageIndex,lastMessage,lastBotMessage)
       if(lastBotMessageIndex!==0){
         if(lastMessage&&lastMessage==='daily'){
           await web.chat.postMessage({
@@ -34,7 +33,7 @@ router.post('/message', function (req, res) {
             text: BotMessages[0],
           })
         }else{
-          if(BotMessages.indexOf(lastBotMessage)===BotMessages.length){
+          if(BotMessages.indexOf(lastBotMessage)===BotMessages.length-1){
             await web.chat.postMessage({
               channel:'#daily' ,
               text: `daily report complete by <${req.body.event.user}>`,
