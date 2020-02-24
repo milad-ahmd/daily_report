@@ -6,6 +6,7 @@ const axios = require('axios')
 const User = require('./models/user')
 const mongoose = require('mongoose')
 const Message = require('./models/message')
+const moment = require('moment')
 
 const BotMessages = ['Hey! Are you ready to have our YapAiTek daily meeting now?(y/n)',
   'Nice, this is your update for YapAiTek.Let\'s begin! What did you work on yesterday?',
@@ -126,7 +127,7 @@ router.post('/message', function (req, res) {
               })
             }
           }
-        }else{
+        }else if(!req.body.event.bot_id){
           const user = new User({
             _id: new mongoose.Types.ObjectId(),
             slackId:req.body.event.user,
