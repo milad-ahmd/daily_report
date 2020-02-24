@@ -3,9 +3,9 @@ const router = express.Router()
 const { WebClient } = require('@slack/web-api')
 const config = require('./config')
 const axios = require('axios')
-const User = require('../models/user')
+const User = require('./models/user')
 const mongoose = require('mongoose')
-const Message = require('../models/message')
+const Message = require('./models/message')
 
 const BotMessages = ['Hey! Are you ready to have our YapAiTek daily meeting now?(y/n)',
   'Nice, this is your update for YapAiTek.Let\'s begin! What did you work on yesterday?',
