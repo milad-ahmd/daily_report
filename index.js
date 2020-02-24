@@ -11,10 +11,7 @@ const server = http.createServer(app)
 server.listen(port)
 
 mongoose.connect(
-  'mongodb://localhost:27017/daily_bot',
-  {
-    useMongoClient: true
-  }
+  'mongodb://localhost:27017/daily_bot'
 )
 
 mongoose.Promise = global.Promise
