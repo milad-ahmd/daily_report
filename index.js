@@ -1,37 +1,28 @@
-const express = require("express");
-const app = express();
-const port = process.env.PORT || 3000;
-const bodyParser = require("body-parser");
-const slackRouter = require("./slack");
-const http = require('http');
+const express = require('express')
+const app = express()
+const port = process.env.PORT || 3000
+const bodyParser = require('body-parser')
+const slackRouter = require('./slack')
+const http = require('http')
+const mongoose = require('mongoose')
 
+const server = http.createServer(app)
 
-const server = http.createServer(app);
+server.listen(port)
 
-server.listen(port);
-
-
-app.use(bodyParser.urlencoded({ extended: true}));
-app.use(bodyParser.json({limit: '50mb'}));
-
-(async () => {
-  console.log(`Listening for events on ${port}`);
-})();
-
-app.use("/api", slackRouter);
-
-
-(async () => {
-
-  try {
-    // Use the `chat.postMessage` method to send a message from this app
-//    await web.chat.postMessage({
-//      channel: '#daily',
-//      text: `The current time is ${currentTime}`,
-//    });
-  } catch (error) {
-    console.log(error);
+mongoose.connect(
+  'mongodb://localhost:27017/daily_bot',
+  {
+    useMongoClient: true
   }
+)
 
-  console.log('Message posted!');
-})();
+mongoose.Promise = global.Promise
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({ limit: '50mb' }));
+
+(async () => {
+  console.log(`Listening for events on ${port}`)
+})()
+
+app.use('/api', slackRouter);
