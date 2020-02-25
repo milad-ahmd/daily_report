@@ -11,7 +11,7 @@ const moment = require('moment')
 const BotMessages = ['Hey! Are you ready to have our *YapAiTek* daily meeting now?(y/n)',
   'Nice, this is your update for *YapAiTek* .Let\'s begin! What did you work on *yesterday*?',
   'Ok. What are you going to work on *today*?',
-  'Great. Do you have any *blockers*? If so, just tell me. Otherwise please say \'no\'.',
+  'Great. Do you have any *blockers*? If so, just tell me. Otherwise please say (*no*).',
   'Well done! This is all, you can continue with your work ']
 
 const web = new WebClient(config.token)
