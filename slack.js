@@ -74,7 +74,7 @@ router.post('/message', function (req, res) {
 
               }
               if(botMessageIndex>1){
-                await this.sendMessage(docs[0]._id,req.body.event.user,lastMessage,botMessageIndex===0?'daily':BotMessages[botMessageIndex],req.body.event.channel);
+                await this.sendMessage(docs[0]._id,req.body.event.user,lastMessage,BotMessages[botMessageIndex],req.body.event.channel);
 
               }
               if (botMessageIndex === BotMessages.length - 1) {
