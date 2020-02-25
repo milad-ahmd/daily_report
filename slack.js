@@ -115,6 +115,7 @@ router.post('/message', function (req, res) {
                         ]
                       })
                     }
+                    console.log(item.question===BotMessages[3],item.question,BotMessages[3])
                     if(item.question===BotMessages[3]&& item.text!=='no'){
                       blocks.push({
                         'fallback': 'Required plain-text summary of the attachment.',
