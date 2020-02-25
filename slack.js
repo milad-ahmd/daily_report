@@ -16,7 +16,7 @@ const BotMessages = ['Hey! Are you ready to have our YapAiTek daily meeting now?
 
 const web = new WebClient(config.token)
 
-exports.sendMessage = async (userId, userSlackId, text, question, channel) => {
+sendMessage = async (userId, userSlackId, text, question, channel) => {
   await web.chat.postMessage({
     channel: channel,
     text: text,
