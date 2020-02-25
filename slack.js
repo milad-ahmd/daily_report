@@ -75,40 +75,63 @@ router.post('/message', function (req, res) {
               }
               if(botMessageIndex>1){
                 await this.sendMessage(docs[0]._id,req.body.event.user,lastMessage,BotMessages[botMessageIndex-1],req.body.event.channel);
-
               }
               if (botMessageIndex === BotMessages.length - 1) {
                 Message.find({userId:docs[0]._id,userSlackId:req.body.event.user,channelId:req.body.event.channel,date:moment(new Date()).format('YYYY/MM/DD')}).then(async reports=>{
-                  var text='';
-                  let blocks=[{
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": `I just got a new daily report by <@${req.body.event.user}> for *YapAiTek* Follow-Up. Check it out:`
-                    }
-                  },{
-                    "type": "divider"
-                  },]
+                  var text=`Daily Report by <@${req.body.event.user}>`;
+                  let blocks=[
+                    {
+                      'fallback': 'Required plain-text summary of the attachment.',
+                      'color': '#36a64f',
+                      "author_name": `<@${req.body.event.user}>`
+                    },{
+                      "type": "divider"
+                    }]
                   for(let item of reports){
-                    blocks.push({
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": `*${item.question}*`
-                      }
-                    })
-                    blocks.push({
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": `${item.text}`
-                      }
-                    })
+                    if(item.question===BotMessages[1]){
+                      blocks.push({
+                        'fallback': 'Required plain-text summary of the attachment.',
+                        'color': '#000feb',
+                        "fields": [
+                          {
+                            "title": '*Yesterdays Progress*',
+                            "value": item.text,
+                            "short": false
+                          }
+                        ]
+                      })
+                    }
+                    if(item.question===BotMessages[2]){
+                      blocks.push({
+                        'fallback': 'Required plain-text summary of the attachment.',
+                        'color': '#36a64f',
+                        "fields": [
+                          {
+                            "title": '*Plans for today*',
+                            "value": item.text,
+                            "short": false
+                          }
+                        ]
+                      })
+                    }
+                    if(item.question===BotMessages[3]){
+                      blocks.push({
+                        'fallback': 'Required plain-text summary of the attachment.',
+                        'color': '#eb0008',
+                        "fields": [
+                          {
+                            "title": '*Any Blockers*',
+                            "value": item.text,
+                            "short": false
+                          }
+                        ]
+                      })
+                    }
                   }
                   await web.chat.postMessage({
                     channel: '#daily',
-                    text:'',
-                    blocks: blocks,
+                    text:text,
+                    attachments: blocks,
                   })
                 })
 
