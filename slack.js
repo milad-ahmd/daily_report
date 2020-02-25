@@ -71,8 +71,11 @@ router.post('/message', function (req, res) {
                   channel: req.body.event.channel,
                   text: BotMessages[botMessageIndex],
                 })
+
               }
               if(botMessageIndex>1){
+                await this.sendMessage(docs[0]._id,req.body.event.user,lastMessage,botMessageIndex===0?'daily':BotMessages[botMessageIndex],req.body.event.channel);
+
               }
               if (botMessageIndex === BotMessages.length - 1) {
                 Message.find({userId:docs[0]._id,userSlackId:req.body.event.user,channelId:req.body.event.channel,date:moment(new Date()).format('YYYY/MM/DD')}).then(async reports=>{
