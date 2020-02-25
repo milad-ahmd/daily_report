@@ -34,7 +34,6 @@ sendMessage = async (userId, userSlackId, text, question, channel) => {
 
 router.post('/message', function (req, res) {
   if (req.body.event.channel_type === 'im' && req.body.event.type === 'message') {
-    console.log(req.body.event)
     axios.get(`https://slack.com/api/conversations.history?token=${config.token}&channel=${req.body.event.channel}&limit=10`).then(async messages => {
       User.find({ slackId: req.body.event.user }).then(async docs => {
         if (docs.length > 0&&!req.body.event.bot_id) {
