@@ -130,7 +130,7 @@ router.post('/message', function (req, res) {
                       }
                     }
                     await web.chat.postMessage({
-                      channel: '#daily',
+                      channel: '#daily_report',
                       text:text,
                       attachments: blocks,
                     })

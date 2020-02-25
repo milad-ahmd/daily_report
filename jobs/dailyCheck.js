@@ -28,16 +28,16 @@ cron.schedule("* 12 * * *", function() {
             }
           }
           await web.chat.postMessage({
-            channel: '#daily',
+            channel: '#daily_report_report',
             text: 'these users doesnt complete their daily report \n'+`${usersSlackId.join(' , ')}`,
           })
           const message = new Message({
             _id: new mongoose.Types.ObjectId(),
             text: 'these users doesnt complete their daily report \n'+`${usersSlackId.join(' , ')}`,
             question: 'these users doesnt complete their daily report \n'+`${usersSlackId.join(' , ')}`,
-            userId: '#daily',
-            userSlackId: '#daily',
-            channelId: '#daily',
+            userId: '#daily_report',
+            userSlackId: '#daily_report',
+            channelId: '#daily_report',
             date: moment(new Date()).format('YYYY/MM/DD')
           })
           message.save().then(result => {
