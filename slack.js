@@ -115,7 +115,7 @@ router.post('/message', function (req, res) {
                         ]
                       })
                     }
-                    if(item.question==='Great. Do you have any *blockers*? If so, just tell me. Otherwise please say (*no*).'&& item.text!=='no'){
+                    if(item.question===BotMessages[3]&& item.text!=='no'){
                       blocks.push({
                         'fallback': 'Required plain-text summary of the attachment.',
                         'color': '#eb0008',
