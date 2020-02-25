@@ -82,7 +82,7 @@ router.post('/message', function (req, res) {
                   let blocks=[
                     {
                       'fallback': 'Required plain-text summary of the attachment.',
-                      'color': '#36a64f',
+                      'color': '#a8a6a8',
                       "author_name": `${docs[0].name}`,
                       "author_icon":`${docs[0].avatar}`
                     },{
