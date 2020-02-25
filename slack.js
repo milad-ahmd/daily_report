@@ -73,7 +73,7 @@ router.post('/message', function (req, res) {
                 })
 
               }
-              if(botMessageIndex>=1){
+              if(botMessageIndex>1){
                 await this.sendMessage(docs[0]._id,req.body.event.user,lastMessage,BotMessages[botMessageIndex-1],req.body.event.channel);
 
               }
