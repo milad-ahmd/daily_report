@@ -4,6 +4,8 @@ const userSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   slackId:String,
   channelId:String,
+  avatar:String,
+  name:String,
   isActive: { type: Boolean, default: true }
 });
 

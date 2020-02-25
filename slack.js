@@ -83,7 +83,8 @@ router.post('/message', function (req, res) {
                     {
                       'fallback': 'Required plain-text summary of the attachment.',
                       'color': '#36a64f',
-                      "author_name": `<@${req.body.event.user}>`
+                      "author_name": `${docs[0].name}`,
+                      "author_icon":`${docs[0].avatar}`
                     },{
                       "type": "divider"
                     }]
@@ -145,22 +146,27 @@ router.post('/message', function (req, res) {
               })
             }
           }
-        } else if (!req.body.event.bot_id) {
-          const user = new User({
-            _id: new mongoose.Types.ObjectId(),
-            slackId: req.body.event.user,
-            channelId: req.body.event.channel,
-            isActive: true
-          })
-          user.save().then(async result => {
-            await web.chat.postMessage({
-              channel: req.body.event.channel,
-              text: BotMessages[0],
+        }
+        else if (!req.body.event.bot_id) {
+          axios.get(`https://slack.com/api/users.info?token=${config.token}&user=${req.body.event.user}`).then(userInfo=>{
+            const user = new User({
+              _id: new mongoose.Types.ObjectId(),
+              slackId: req.body.event.user,
+              channelId: req.body.event.channel,
+              name:userInfo.data.user.profile.real_name_normalized,
+              avatar:userInfo.data.user.profile.image_original,
+              isActive: true
             })
-          }).catch(err => {
-            console.log(err)
-
+            user.save().then(async result => {
+              await web.chat.postMessage({
+                channel: req.body.event.channel,
+                text: BotMessages[1],
+              })
+            }).catch(err => {
+              console.log(err)
+            })
           })
+
         }
       })
 
