@@ -92,7 +92,7 @@ router.post('/message', function (req, res) {
                     if(item.question===BotMessages[1]){
                       blocks.push({
                         'fallback': 'Required plain-text summary of the attachment.',
-                        'color': '#000feb',
+                        'color': '#135eff',
                         "fields": [
                           {
                             "title": '*Yesterdays Progress*',
