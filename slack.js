@@ -8,10 +8,10 @@ const mongoose = require('mongoose')
 const Message = require('./models/message')
 const moment = require('moment')
 
-const BotMessages = ['Hey! Are you ready to have our YapAiTek daily meeting now?(y/n)',
-  'Nice, this is your update for YapAiTek.Let\'s begin! What did you work on yesterday?',
-  'Ok. What are you going to work on today?',
-  'Great. Do you have any blockers? If so, just tell me. Otherwise please say \'no\'.',
+const BotMessages = ['Hey! Are you ready to have our *YapAiTek* daily meeting now?(y/n)',
+  'Nice, this is your update for *YapAiTek* .Let\'s begin! What did you work on *yesterday*?',
+  'Ok. What are you going to work on *today*?',
+  'Great. Do you have any *blockers*? If so, just tell me. Otherwise please say \'no\'.',
   'Well done! This is all, you can continue with your work ']
 
 const web = new WebClient(config.token)
@@ -80,14 +80,34 @@ router.post('/message', function (req, res) {
               if (botMessageIndex === BotMessages.length - 1) {
                 Message.find({userId:docs[0]._id,userSlackId:req.body.event.user,channelId:req.body.event.channel,date:moment(new Date()).format('YYYY/MM/DD')}).then(async reports=>{
                   var text='';
+                  let blocks=[{
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": `I just got a new daily report by <@${req.body.event.user}> for *YapAiTek* Follow-Up. Check it out:`
+                    }
+                  },{
+                    "type": "divider"
+                  },]
                   for(let item of reports){
-                    text+=item.question+'\n'
-                    text+=item.text+'\n'
+                    blocks.push({
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": `*${item.question}*`
+                      }
+                    })
+                    blocks.push({
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": `${item.text}`
+                      }
+                    })
                   }
-                  text+='author: '+`#<${req.body.event.user}>`
                   await web.chat.postMessage({
                     channel: '#daily',
-                    text: text,
+                    blocks: blocks,
                   })
                 })
 
