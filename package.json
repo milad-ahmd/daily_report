@@ -20,6 +20,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.9.2",
     "node-cron": "^2.0.3",
+    "node-schedule-tz": "^1.2.1-4",
     "nodemon": "^2.0.2"
   }
 }

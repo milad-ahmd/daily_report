@@ -7,10 +7,10 @@ const User = require('../models/user')
 const mongoose = require('mongoose')
 const Message = require('../models/message')
 const moment = require('moment')
-
+var schedule = require('node-schedule-tz');
 const web = new WebClient(config.token)
 
-cron.schedule("* 12 * * *", function() {
+schedule.scheduleJob('0 9 * * *','Asia/Tehran', function(){
   User.find({ isActive: true }).then(async docs => {
     if (docs.length > 0) {
       Message.find({date:moment(new Date()).format('YYYY/MM/DD'),complete:true}).then(async messages=>{
@@ -27,29 +27,20 @@ cron.schedule("* 12 * * *", function() {
               usersSlackId.push(item.slackId);
             }
           }
-          await web.chat.postMessage({
-            channel: '#daily_report_report',
-            text: 'these users doesnt complete their daily report \n'+`${usersSlackId.join(' , ')}`,
-          })
-          const message = new Message({
-            _id: new mongoose.Types.ObjectId(),
-            text: 'these users doesnt complete their daily report \n'+`${usersSlackId.join(' , ')}`,
-            question: 'these users doesnt complete their daily report \n'+`${usersSlackId.join(' , ')}`,
-            userId: '#daily_report',
-            userSlackId: '#daily_report',
-            channelId: '#daily_report',
-            date: moment(new Date()).format('YYYY/MM/DD')
-          })
-          message.save().then(result => {
-
-          }).catch(err => {
-            console.log(err)
-          })
+          for (let item of docs) {
+            await web.chat.postMessage({
+              channel: item.channelId,
+              text: 'Hey! Are you ready to have our YapAiTek daily meeting now?(y/n)',
+            })
+          }
         }
       })
     }
   }).catch(err => {
     console.log(err)
   })
+});
+cron.schedule("* 12 * * *", function() {
+
 });
 app.listen("3002");
