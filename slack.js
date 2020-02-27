@@ -115,7 +115,7 @@ router.post('/message', function (req, res) {
                           ]
                         })
                       }
-                      if(item.question===BotMessages[3]&& item.text!=='no'){
+                      if(item.question===BotMessages[3]&& item.text.toLowerCase()!=='no'){
                         blocks.push({
                           'fallback': 'Required plain-text summary of the attachment.',
                           'color': '#eb0008',
