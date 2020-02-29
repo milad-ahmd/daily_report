@@ -33,15 +33,18 @@ const job = new CronJob({
                 usersSlackId.push(item.slackId)
               }
             }
-            let userList=''
-            for (let item of usersSlackId){
-              userList+=`<@${item}> ,\n`
-            }
+            if(usersSlackId.length>0){
+              let userList=''
+              for (let item of usersSlackId){
+                userList+=`<@${item}> ,\n`
+              }
 
-            await web.chat.postMessage({
-              channel: '#daily_report',
-              text: 'these users dont complete their daily report \n'+userList,
-            })
+              await web.chat.postMessage({
+                channel: '#daily_report',
+                text: 'these users dont complete their daily report \n'+userList,
+              })
+
+            }
 
           }
         })
