@@ -12,13 +12,15 @@ const web = new WebClient(config.token)
 
 const CronJob = require('cron').CronJob;
 const job = new CronJob({
-  // Run at 05:00 Central time, only on weekdays
-  cronTime: '00 00 09 * * *',
+  cronTime: '00 10 9 * * *',
   onTick: function() {
+    console.log(1)
     User.find({ isActive: true }).then(async docs => {
+      console.log(2)
       if (docs.length > 0) {
         Message.find({date:moment(new Date()).format('YYYY/MM/DD'),complete:true}).then(async messages=>{
           let usersComplete=[];
+          console.log(3)
           let users=[]
           let usersSlackId=[]
           if(messages){
@@ -31,6 +33,7 @@ const job = new CronJob({
                 usersSlackId.push(item.slackId);
               }
             }
+            console.log(docs)
             for (let item of docs) {
               await web.chat.postMessage({
                 channel: item.channelId,
