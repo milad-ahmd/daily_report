@@ -9,13 +9,13 @@ const web = new WebClient(config.token)
 
 const mongoose = require('mongoose')
 mongoose.connect(
-  'mongodb://localhost:27017/daily_bot'
+  'mongodb://194.5.193.94:27017/daily_bot'
 )
 mongoose.Promise = global.Promise
 const CronJob = require('cron').CronJob
 const job = new CronJob({
   // Run at 05:00 Central time, only on weekdays
-  cronTime: '00 15 12 * * *',
+  cronTime: '00 38 12 * * *',
   onTick: function () {
     User.find({ isActive: true }).then(async docs => {
       if (docs.length > 0) {
@@ -23,12 +23,12 @@ const job = new CronJob({
           let usersComplete = []
           let users = []
           let usersSlackId = []
-          if (messages) {
+          if (messages.length>0) {
             for (let sub of messages) {
               usersComplete.push(sub.userId)
             }
             for (let item of docs) {
-              if (!(usersComplete.indexOf(item._id) > -1)) {
+              if (!usersComplete.includes(item._id.toString())) {
                 users.push(item)
                 usersSlackId.push(item.slackId)
               }
@@ -50,7 +50,6 @@ const job = new CronJob({
                 text: 'Thanks for your daily Report',
               })
             }
-
           }
         })
       }
@@ -61,5 +60,6 @@ const job = new CronJob({
   start: true,
   timeZone: 'Asia/Tehran'
 })
+
 job.start()
 app.listen('3002')
