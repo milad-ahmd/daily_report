@@ -24,7 +24,7 @@ sendMessage = async (userId, userSlackId, text, question, channel) => {
     userId: userId,
     userSlackId: userSlackId,
     channelId: channel,
-    complete:question===BotMessages[4],
+    complete:question==='Great. Do you have any *blockers*? If so, just tell me. Otherwise please say (*no*).',
     date: moment(new Date()).format('YYYY/MM/DD')
   })
   message.save().then(result => {
