@@ -44,6 +44,11 @@ const job = new CronJob({
                 text: 'these users dont complete their daily report \n'+userList,
               })
 
+            }else{
+              await web.chat.postMessage({
+                channel: '#daily_report',
+                text: 'Thanks for your daily Report',
+              })
             }
 
           }
