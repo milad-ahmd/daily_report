@@ -8,15 +8,20 @@ const moment = require('moment')
 
 const web = new WebClient(config.token)
 
+const mongoose = require('mongoose')
 
+mongoose.connect(
+  'mongodb://localhost:27017/daily_bot'
+)
 
+mongoose.Promise = global.Promise
 const CronJob = require('cron').CronJob;
 const job = new CronJob({
-  cronTime: '00 10 9 * * *',
+  cronTime: '00 18 9 * * *',
   onTick: function() {
     console.log(1)
     User.find({ isActive: true }).then(async docs => {
-      console.log(2)
+      console.log(docs)
       if (docs.length > 0) {
         Message.find({date:moment(new Date()).format('YYYY/MM/DD'),complete:true}).then(async messages=>{
           let usersComplete=[];

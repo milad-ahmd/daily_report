@@ -7,7 +7,13 @@ const Message = require('../models/message')
 const moment = require('moment')
 const web = new WebClient(config.token)
 
+const mongoose = require('mongoose')
 
+mongoose.connect(
+  'mongodb://localhost:27017/daily_bot'
+)
+
+mongoose.Promise = global.Promise
 const CronJob = require('cron').CronJob;
 const job = new CronJob({
   // Run at 05:00 Central time, only on weekdays
