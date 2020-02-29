@@ -17,7 +17,7 @@ mongoose.connect(
 mongoose.Promise = global.Promise
 const CronJob = require('cron').CronJob;
 const job = new CronJob({
-  cronTime: '00 18 9 * * *',
+  cronTime: '00 00 9 * * *',
   onTick: function() {
     console.log(1)
     User.find({ isActive: true }).then(async docs => {
@@ -39,7 +39,7 @@ const job = new CronJob({
               }
             }
             console.log(docs)
-            for (let item of docs) {
+            for (let item of users) {
               await web.chat.postMessage({
                 channel: item.channelId,
                 text: 'Hey! Are you ready to have our YapAiTek daily meeting now?(y/n)',
