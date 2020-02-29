@@ -33,12 +33,11 @@ const job = new CronJob({
               usersComplete.push(sub.userId)
             }
             for (let item of docs) {
-              if(!(usersComplete.indexOf(item._id)>-1)){
+              if(!(usersComplete.indexOf(item._id.toString())>-1)){
                 users.push(item);
                 usersSlackId.push(item.slackId);
               }
             }
-            console.log(docs)
             for (let item of users) {
               await web.chat.postMessage({
                 channel: item.channelId,

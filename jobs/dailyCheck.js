@@ -15,7 +15,7 @@ mongoose.Promise = global.Promise
 const CronJob = require('cron').CronJob
 const job = new CronJob({
   // Run at 05:00 Central time, only on weekdays
-  cronTime: '00 40 12 * * *',
+  cronTime: '00 00 12 * * *',
   onTick: function () {
     User.find({ isActive: true }).then(async docs => {
       if (docs.length > 0) {
