@@ -9,13 +9,13 @@ const web = new WebClient(config.token)
 
 const mongoose = require('mongoose')
 mongoose.connect(
-  'mongodb://194.5.193.94:27017/daily_bot'
+  'mongodb://localhost:27017/daily_bot'
 )
 mongoose.Promise = global.Promise
 const CronJob = require('cron').CronJob
 const job = new CronJob({
   // Run at 05:00 Central time, only on weekdays
-  cronTime: '00 38 12 * * *',
+  cronTime: '00 40 12 * * *',
   onTick: function () {
     User.find({ isActive: true }).then(async docs => {
       if (docs.length > 0) {
