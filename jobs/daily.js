@@ -41,7 +41,7 @@ const job = new CronJob({
             for (let item of users) {
               await web.chat.postMessage({
                 channel: item.channelId,
-                text: 'Hey! Are you ready to have our YapAiTek daily meeting now?(y/n)',
+                text: 'Hey! Are you ready to have our *YapAiTek* daily meeting now?(y/n)',
               })
             }
           }
