@@ -9,7 +9,7 @@ const web = new WebClient(config.token)
 
 const mongoose = require('mongoose')
 mongoose.connect(
-  'mongodb://localhost:27017/daily_bot'
+  'mongodb://milad:74626731@localhost:27017/daily_bot?authSource=admin'
 )
 mongoose.Promise = global.Promise
 const CronJob = require('cron').CronJob

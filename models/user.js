@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema({
   channelId:String,
   avatar:String,
   name:String,
+  timeZone:{type:String,default:'Asia/Tehran'},
   isActive: { type: Boolean, default: true }
 });
 
