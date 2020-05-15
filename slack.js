@@ -174,8 +174,8 @@ router.post('/message', function (req, res) {
 
   //   })
   // }
-  console.log(req.body);
-  return res.send(req.body)
+  console.log(req.body.challenge)
+  return res.send(req.body.challenge)
 })
 
 module.exports = router
