@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d9b726c-55ce-47e1-8d72-54567386aca8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/slack.js" beforeDir="false" afterPath="$PROJECT_DIR$/slack.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -74,7 +75,8 @@
       <workItem from="1582782948740" duration="21160000" />
       <workItem from="1583131633678" duration="9132000" />
       <workItem from="1586025285746" duration="364000" />
-      <workItem from="1589608034210" duration="437000" />
+      <workItem from="1589608034210" duration="1103000" />
+      <workItem from="1590647131785" duration="1092000" />
     </task>
     <servers />
   </component>

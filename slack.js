@@ -7,12 +7,14 @@ const User = require('./models/user')
 const mongoose = require('mongoose')
 const Message = require('./models/message')
 const moment = require('moment')
-
+const motivationQ='lets do this secretly.whats your motivation about work this week?score from 1 to 5(5 being high motivation)';
+const motivationA='Thanks your answer will be kept anonymous'
 const BotMessages = ['Hey! Are you ready to have our *YapAiTek* daily meeting now?(y/n)',
   'Nice, this is your update for *YapAiTek* .Let\'s begin! What did you work on *yesterday*?',
   'Ok. What are you going to work on *today*?',
   'Great. Do you have any *blockers*? If so, just tell me. Otherwise please say (*no*).',
   'Well done! This is all, you can continue with your work ']
+
 
 const web = new WebClient(config.token)
 
@@ -58,6 +60,25 @@ router.post('/message', function (req, res) {
                 channel: req.body.event.channel,
                 text: BotMessages[0],
               })
+            }else if (lastMessage && lastBotMessage === motivationQ) {
+              const message = new Message({
+                _id: new mongoose.Types.ObjectId(),
+                text: lastMessage,
+                question: motivationQ,
+                userId: docs[0]._id,
+                userSlackId: req.body.event.user,
+                channelId: req.body.event.channel,
+                complete:false,
+                date: moment(new Date()).format('YYYY/MM/DD')
+              })
+              message.save().then(result => {
+              }).catch(err => {
+                console.log(err)
+              })
+              await web.chat.postMessage({
+                channel: req.body.event.channel,
+                text: motivationA,
+              })
             } else {
               let botMessageIndex = lastBotMessage ? BotMessages.indexOf(lastBotMessage) + 1 : 0
               if (botMessageIndex === 1 && lastMessage === 'n') {
@@ -65,6 +86,13 @@ router.post('/message', function (req, res) {
                   channel: req.body.event.channel,
                   text: 'ok you can complete your daily report if you have been ready with send daily word to bot!.',
                 })
+                let todayDate=moment(new Date()).day()
+                if(todayDate===4){
+                  return await web.chat.postMessage({
+                    channel: req.body.event.channel,
+                    text: motivationQ,
+                  })
+                }
               }
               if(botMessageIndex>=1){
                 await web.chat.postMessage({
@@ -89,47 +117,104 @@ router.post('/message', function (req, res) {
                       },{
                         "type": "divider"
                       }]
-                    for(let item of reports){
-                      if(item.question===BotMessages[1]){
-                        blocks.push({
-                          'fallback': 'Required plain-text summary of the attachment.',
-                          'color': '#135eff',
-                          "fields": [
-                            {
-                              "title": '*Yesterdays Progress*',
-                              "value": item.text,
-                              "short": false
-                            }
-                          ]
-                        })
+                    if(reports.length===3){
+                      for(let item of reports){
+                        if(item.question===BotMessages[1]){
+                          blocks.push({
+                            'fallback': 'Required plain-text summary of the attachment.',
+                            'color': '#135eff',
+                            "fields": [
+                              {
+                                "title": '*Yesterdays Progress*',
+                                "value": item.text,
+                                "short": false
+                              }
+                            ]
+                          })
+                        }
+                        if(item.question===BotMessages[2]){
+                          blocks.push({
+                            'fallback': 'Required plain-text summary of the attachment.',
+                            'color': '#36a64f',
+                            "fields": [
+                              {
+                                "title": '*Plans for today*',
+                                "value": item.text,
+                                "short": false
+                              }
+                            ]
+                          })
+                        }
+                        if(item.question===BotMessages[3]&& item.text.toLowerCase()!=='no'){
+                          blocks.push({
+                            'fallback': 'Required plain-text summary of the attachment.',
+                            'color': '#eb0008',
+                            "fields": [
+                              {
+                                "title": '*Any Blockers*',
+                                "value": item.text,
+                                "short": false
+                              }
+                            ]
+                          })
+                        }
                       }
-                      if(item.question===BotMessages[2]){
-                        blocks.push({
-                          'fallback': 'Required plain-text summary of the attachment.',
-                          'color': '#36a64f',
-                          "fields": [
-                            {
-                              "title": '*Plans for today*',
-                              "value": item.text,
-                              "short": false
-                            }
-                          ]
-                        })
+                    }else{
+                      let answers={}
+                      for(let item of reports){
+                        if(item.question===BotMessages[1]){
+                          answers['1']=item;
+                        }
+                        if(item.question===BotMessages[2]){
+                          answers['2']=item;
+                        }
+                        if(item.question===BotMessages[3]&& item.text.toLowerCase()!=='no'){
+                          answers['3']=item;
+                        }
                       }
-                      if(item.question===BotMessages[3]&& item.text.toLowerCase()!=='no'){
-                        blocks.push({
-                          'fallback': 'Required plain-text summary of the attachment.',
-                          'color': '#eb0008',
-                          "fields": [
-                            {
-                              "title": '*Any Blockers*',
-                              "value": item.text,
-                              "short": false
-                            }
-                          ]
-                        })
+                      for(let item in answers){
+                        if(answers[item].question===BotMessages[1]){
+                          blocks.push({
+                            'fallback': 'Required plain-text summary of the attachment.',
+                            'color': '#135eff',
+                            "fields": [
+                              {
+                                "title": '*Yesterdays Progress*',
+                                "value": answers[item].text,
+                                "short": false
+                              }
+                            ]
+                          })
+                        }
+                        if(answers[item].question===BotMessages[2]){
+                          blocks.push({
+                            'fallback': 'Required plain-text summary of the attachment.',
+                            'color': '#36a64f',
+                            "fields": [
+                              {
+                                "title": '*Plans for today*',
+                                "value": answers[item].text,
+                                "short": false
+                              }
+                            ]
+                          })
+                        }
+                        if(answers[item].question===BotMessages[3]&& answers[item].text.toLowerCase()!=='no'){
+                          blocks.push({
+                            'fallback': 'Required plain-text summary of the attachment.',
+                            'color': '#eb0008',
+                            "fields": [
+                              {
+                                "title": '*Any Blockers*',
+                                "value": answers[item].text,
+                                "short": false
+                              }
+                            ]
+                          })
+                        }
                       }
                     }
+
                     await web.chat.postMessage({
                       channel: '#daily_report',
                       text:text,
