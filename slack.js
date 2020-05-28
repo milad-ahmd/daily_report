@@ -82,12 +82,11 @@ router.post('/message', function (req, res) {
             } else {
               let botMessageIndex = lastBotMessage ? BotMessages.indexOf(lastBotMessage) + 1 : 0
               if (botMessageIndex === 1 && lastMessage === 'n') {
-                return await web.chat.postMessage({
+                await web.chat.postMessage({
                   channel: req.body.event.channel,
                   text: 'ok you can complete your daily report if you have been ready with send daily word to bot!.',
                 })
                 let todayDate=moment(new Date()).day()
-                console.log('todayDate=============>',todayDate)
                 if(todayDate===4){
                   return await web.chat.postMessage({
                     channel: req.body.event.channel,
