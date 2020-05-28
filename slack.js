@@ -87,6 +87,7 @@ router.post('/message', function (req, res) {
                   text: 'ok you can complete your daily report if you have been ready with send daily word to bot!.',
                 })
                 let todayDate=moment(new Date()).day()
+                console.log('todayDate=============>',todayDate)
                 if(todayDate===4){
                   return await web.chat.postMessage({
                     channel: req.body.event.channel,
