@@ -86,25 +86,25 @@ router.post('/message', function (req, res) {
                   channel: req.body.event.channel,
                   text: 'ok you can complete your daily report if you have been ready with send daily word to bot!.',
                 })
-                let todayDate=moment(new Date()).day()
-                if(todayDate===4){
-                  return await web.chat.postMessage({
-                    channel: req.body.event.channel,
-                    text: motivationQ,
-                  })
-                }
+                
               }
               if(botMessageIndex>=1){
                 await web.chat.postMessage({
                   channel: req.body.event.channel,
                   text: BotMessages[botMessageIndex],
                 })
-
               }
               if(botMessageIndex>1){
                 await this.sendMessage(docs[0]._id,req.body.event.user,lastMessage,BotMessages[botMessageIndex-1],req.body.event.channel);
               }
               if (botMessageIndex === BotMessages.length - 1) {
+                let todayDate=moment(new Date()).day()
+                if(todayDate===4){
+                  await web.chat.postMessage({
+                    channel: req.body.event.channel,
+                    text: motivationQ,
+                  })
+                }
                 setTimeout(async function () {
                   Message.find({userId:docs[0]._id,userSlackId:req.body.event.user,channelId:req.body.event.channel,date:moment(new Date()).format('YYYY/MM/DD')}).then(async reports=>{
                     var text=`Daily Report by <@${req.body.event.user}>`;
