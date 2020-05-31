@@ -99,7 +99,7 @@ router.post('/message', function (req, res) {
               }
               if (botMessageIndex === BotMessages.length - 1) {
                 let todayDate=moment(new Date()).day()
-                if(todayDate===4){
+                if(todayDate===0){
                   await web.chat.postMessage({
                     channel: req.body.event.channel,
                     text: motivationQ,
