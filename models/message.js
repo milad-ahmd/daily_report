@@ -8,6 +8,7 @@ const messageSchema = mongoose.Schema({
   userSlackId:String,
   channelId:String,
   complete:{type:Boolean,default:false},
+  completeReport:{type:Boolean,default:false},
   date:String
 });
 
