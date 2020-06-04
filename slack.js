@@ -119,8 +119,7 @@ router.post('/message', function (req, res) {
                                         userSlackId: req.body.event.user,
                                         channelId: req.body.event.channel,
                                         date: moment(new Date()).format('YYYY/MM/DD'),
-                                        complete:true,
-                                        completeReport:false
+
                                     }).then(async reports => {
                                         if (reports.length === 3) {
                                             for (let item of reports) {
@@ -224,16 +223,25 @@ router.post('/message', function (req, res) {
                                         userSlackId: req.body.event.user,
                                         channelId: req.body.event.channel,
                                         date: moment(new Date()).format('YYYY/MM/DD'),
-                                        complete:true,
-                                        completeReport:false
+                                        complete:true
                                       },{$set:{completeReport:true}}).then(async resultMessage=>{
-                                        if(resultMessage){
-                                          await web.chat.postMessage({
-                                            channel: '#daily_report',
-                                            text: text,
-                                            attachments: blocks,
-                                          })
-                                        }
+                                        Message.countDocuments({
+                                          userId: docs[0]._id,
+                                          userSlackId: req.body.event.user,
+                                          channelId: req.body.event.channel,
+                                          date: moment(new Date()).format('YYYY/MM/DD'),
+                                          complete:true,
+                                          completeReport:true
+                                        },async (err, docs) => {
+                                          if (err) { return res.send(err); }
+                                          if(docs===1){
+                                            await web.chat.postMessage({
+                                              channel: '#daily_report',
+                                              text: text,
+                                              attachments: blocks,
+                                            })
+                                          }
+                                        });
                                       })
                                     })
 
