@@ -16,6 +16,8 @@ const BotMessages = ['Hey! Are you ready to have our *YapAiTek* daily meeting no
     'Well done! This is all, you can continue with your work ']
 
 
+
+
 const web = new WebClient(config.token)
 
 sendMessage = async (userId, userSlackId, text, question, channel) => {
