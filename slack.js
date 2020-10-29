@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {WebClient} = require('@slack/web-api')
+const { WebClient } = require('@slack/web-api')
 const config = require('./config')
 const axios = require('axios')
 const User = require('./models/user')
@@ -38,7 +38,7 @@ sendMessage = async (userId, userSlackId, text, question, channel) => {
 router.post('/message', function (req, res) {
     if (req.body.event.channel_type === 'im' && req.body.event.type === 'message') {
         axios.get(`https://slack.com/api/conversations.history?token=${config.token}&channel=${req.body.event.channel}&limit=10`).then(async messages => {
-            User.find({slackId: req.body.event.user}).then(async docs => {
+            User.find({ slackId: req.body.event.user }).then(async docs => {
                 if (docs.length > 0 && !req.body.event.bot_id) {
                     let lastBotMessage = null
                     let lastMessage = messages.data.messages ? messages.data.messages[0].text : null
@@ -104,16 +104,16 @@ router.post('/message', function (req, res) {
                                     })
                                 }
                                 setTimeout(async function () {
-                                  var text = `Daily Report by <@${req.body.event.user}>`;
-                                  let blocks = [
-                                    {
-                                      'fallback': 'Required plain-text summary of the attachment.',
-                                      'color': '#a8a6a8',
-                                      "author_name": `${docs[0].name}`,
-                                      "author_icon": `${docs[0].avatar}`
-                                    }, {
-                                      "type": "divider"
-                                    }]
+                                    var text = `Daily Report by <@${req.body.event.user}>`;
+                                    let blocks = [
+                                        {
+                                            'fallback': 'Required plain-text summary of the attachment.',
+                                            'color': '#a8a6a8',
+                                            "author_name": `${docs[0].name}`,
+                                            "author_icon": `${docs[0].avatar}`
+                                        }, {
+                                            "type": "divider"
+                                        }]
                                     Message.find({
                                         userId: docs[0]._id,
                                         userSlackId: req.body.event.user,
@@ -218,33 +218,32 @@ router.post('/message', function (req, res) {
                                                 }
                                             }
                                         }
-                                      Message.findOneAndUpdate({
-                                        userId: docs[0]._id,
-                                        userSlackId: req.body.event.user,
-                                        channelId: req.body.event.channel,
-                                        date: moment(new Date()).format('YYYY/MM/DD'),
-                                        complete:true
-                                      },{$set:{completeReport:true}}).then(async resultMessage=>{
-                                        Message.countDocuments({
-                                          userId: docs[0]._id,
-                                          userSlackId: req.body.event.user,
-                                          channelId: req.body.event.channel,
-                                          date: moment(new Date()).format('YYYY/MM/DD'),
-                                          complete:true,
-                                          completeReport:true
-                                        },async (err, docs) => {
-                                          if (err) { return res.send(err); }
-                                          if(docs===1){
-                                            await web.chat.postMessage({
-                                              channel: '#daily_report',
-                                              text: text,
-                                              attachments: blocks,
-                                            })
-                                          }
-                                        });
-                                      })
+                                        Message.findOneAndUpdate({
+                                            userId: docs[0]._id,
+                                            userSlackId: req.body.event.user,
+                                            channelId: req.body.event.channel,
+                                            date: moment(new Date()).format('YYYY/MM/DD'),
+                                            complete: true
+                                        }, { $set: { completeReport: true } }).then(async resultMessage => {
+                                            Message.countDocuments({
+                                                userId: docs[0]._id,
+                                                userSlackId: req.body.event.user,
+                                                channelId: req.body.event.channel,
+                                                date: moment(new Date()).format('YYYY/MM/DD'),
+                                                complete: true,
+                                                completeReport: true
+                                            }, async (err, docs) => {
+                                                if (err) { return res.send(err); }
+                                                if (docs === 1) {
+                                                    await web.chat.postMessage({
+                                                        channel: '#daily_report',
+                                                        text: text,
+                                                        attachments: blocks,
+                                                    })
+                                                }
+                                            });
+                                        })
                                     })
-
                                 }, 5000)
                             }
                         }
@@ -256,7 +255,8 @@ router.post('/message', function (req, res) {
                             })
                         }
                     }
-                } else if (!req.body.event.bot_id) {
+
+                } else if (!req.body.event.bot_id) {  //if user no register yet and that is first pm to bot
                     axios.get(`https://slack.com/api/users.info?token=${config.token}&user=${req.body.event.user}`).then(userInfo => {
                         const user = new User({
                             _id: new mongoose.Types.ObjectId(),
